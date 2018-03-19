@@ -1,22 +1,22 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatTable } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { TableComponent } from './table/table.component';
-
+import { MatTableModule } from '@angular/material';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
     TableComponent
   ],
   imports: [
-    BrowserModule, MatTable
+    BrowserModule,
+    MatTableModule
   ],
-  exports: [
-    MatTable
-  ],
+  // exports: [
+  //   MatTable
+  // ],
   providers: [],
   bootstrap: [AppComponent]
 })
