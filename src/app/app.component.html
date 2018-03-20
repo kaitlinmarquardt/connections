@@ -1,6 +1,13 @@
+
 <mat-toolbar color="primary">
   <span>{{title}}</span>
 </mat-toolbar>
-<mat-card class="table-card">
+
+
+<button mat-fab (click)="newRow()">
+  <mat-icon>add</mat-icon>
+</button>
+
+<mat-card class="table-card" (click)="tableClick()">
   <app-table></app-table>
 </mat-card>

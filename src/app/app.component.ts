@@ -8,4 +8,12 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
   title = 'Connections';
+
+  newRow() {
+    alert("button clicked!");
+  }
+  //
+  // tableClick() {
+  //   alert("ugh");
+  // }
 }

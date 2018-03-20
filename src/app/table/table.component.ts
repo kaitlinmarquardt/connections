@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { connection } from './connection';
 
 /**
  * @title Table
@@ -11,12 +12,29 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 })
 
 export class TableComponent {
-  displayedColumns = ['name', 'status', 'method', 'value1', 'value2'];
-  dataSource = new MatTableDataSource(CONNECTION_DATA);
+  handleTableClick() {
+    alert("Table clicked!");
+  }
+
+  handleCellClick() {
+    alert("Cell clicked!");
+  }
+
+  displayedColumns = ['name', 'status', 'method', 'request', 'port', 'address'];
+  // These constants could be in connection.ts and set up with a service
+  statuses = ['Running', 'Paused', 'Stopped']; // To do: green/yellow/red or maybe icons
+  methods = ['HTTPS', 'TCP'];
+  requests = ['PUT', 'POST'];
+  dataSource = new MatTableDataSource(connections);
+
+  handleRowClick() {
+    alert("Row clicked!");
+    console.log("here");
+    // this.selectedConnection = connection;
+  }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
 
   /**
    * Set the paginator and sort after the view init since this component will
@@ -32,30 +50,30 @@ export class TableComponent {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
+
+  // TODO: Remove this when we're done
+  // get diagnostic() { return JSON.stringify(this.model); }
+
+  setName(nameInput: string) {
+    alert("name was set");
+  }
+
 }
 
 export interface Connection {
   name: string;
   status: string;
   method: string;
-  value1: string;
-  value2: string;
+  port: number;
+  request: string;
+  address: string;
 }
 
-const CONNECTION_DATA: Connection[] = [
-  {name: 'Test', status: 'Running', method: 'TCP', value1: '9747', value2: '127.0.0.1'},
-  {name: 'Test2', status: 'Running', method: 'TCP', value1: '9747', value2: '127.0.0.1'},
-  {name: 'Test3', status: 'Running', method: 'TCP', value1: '9747', value2: '127.0.0.1'},
-  {name: 'Connection', status: 'Paused', method: 'HTTPS', value1: 'PUT', value2: 'www.connection.com'},
-  {name: 'Saint Hospital', status: 'Stopped', method: 'HTTPS', value1: 'POST', value2: 'www.sthospital.com'},
-  {name: 'Satan Hospital', status: 'Stopped', method: 'HTTPS', value1: 'POST', value2: 'www.satanhospital.com'},
+export const connections: Connection[] = [
+  {name: 'Test', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
+  {name: 'Test2', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
+  {name: 'Test3', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
+  {name: 'Connection', status: 'Paused', method: 'HTTPS', request: 'PUT', port: '', address: 'www.connection.com'},
+  {name: 'Saint Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.sthospital.com'},
+  {name: 'Satan Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.satanhospital.com'},
 ];
-
-// export class TableComponent implements OnInit {
-//
-//   constructor() { }
-//
-//   ngOnInit() {
-//   }
-//
-// }

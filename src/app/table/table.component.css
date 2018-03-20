@@ -1,26 +1,27 @@
-.table-header {
+/* .table-filter {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   margin: auto;
   max-width: 1000px;
-  /* min-height: 64px;
-  padding: 8px 24px 0; */
+} */
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
 }
 
 .mat-table {
   overflow: auto;
-  max-height: 500px;
+  max-height: 600px;
 }
 
 .mat-header-cell.mat-sort-header-sorted {
   color: black;
 }
 
-.table-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  max-width: 1000px;
-  margin: auto;
+.mat-row:hover {
+  cursor: pointer;
+  background-color: #f5f5f5;
 }
