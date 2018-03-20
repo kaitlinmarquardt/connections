@@ -1,0 +1,8 @@
+.table-card {
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* justify-content: space-around; */
+  min-height: 500px;
+  max-height: 700px;
+  min-width: 300px;
+}

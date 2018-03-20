@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { TableComponent } from './table/table.component';
-import { MatTableModule } from '@angular/material';
+import { MatToolbarModule, MatCardModule, MatTableModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -12,6 +12,8 @@ import { MatTableModule } from '@angular/material';
   ],
   imports: [
     BrowserModule,
+    MatToolbarModule,
+    MatCardModule,
     MatTableModule
   ],
   // exports: [
