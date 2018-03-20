@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { TableComponent } from './table/table.component';
-import { MatToolbarModule, MatCardModule, MatTableModule } from '@angular/material';
+import { MatToolbarModule, MatCardModule, MatTableModule, MatMenuModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,14 @@ import { MatToolbarModule, MatCardModule, MatTableModule } from '@angular/materi
     BrowserModule,
     MatToolbarModule,
     MatCardModule,
-    MatTableModule
+    MatTableModule,
+    MatMenuModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
+    BrowserAnimationsModule
   ],
   // exports: [
   //   MatTable

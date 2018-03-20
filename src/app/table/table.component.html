@@ -1,25 +1,63 @@
+<div class="table-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
+
 <div class="table-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table [dataSource]="dataSource" matSort>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let connection"> {{connection.name}} </mat-cell>
+        <!-- <mat-form-field>
+          <input matInput placeholder="Input">
+        </mat-form-field> -->
     </ng-container>
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+      <mat-cell *matCellDef="let connection"> {{connection.status}} </mat-cell>
+        <!-- <mat-form-field>
+          <mat-select placeholder="Select">
+            <mat-option value="option">Option</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <!-- <button mat-button [matMenuTriggerFor]="menu">
+
+        </button>
+      </mat-cell> -->
     </ng-container>
 
     <!-- Method Column -->
     <ng-container matColumnDef="method">
-      <mat-header-cell *matHeaderCellDef> Communication Method </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.method}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Communication Method </mat-header-cell>
+      <mat-cell *matCellDef="let connection"> {{connection.method}} </mat-cell>
+    </ng-container>
+
+    <!--  Column -->
+    <ng-container matColumnDef="value1">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Port/Request </mat-header-cell>
+      <mat-cell *matCellDef="let connection"> {{connection.value1}} </mat-cell>
+    </ng-container>
+
+    <!--  Column -->
+    <ng-container matColumnDef="value2">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> IP/URL </mat-header-cell>
+      <mat-cell *matCellDef="let connection"> {{connection.value2}} </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Stop</button>
+  <button mat-menu-item>Pause</button>
+  <button mat-menu-item>Running</button>
+</mat-menu>
