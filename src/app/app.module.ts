@@ -7,8 +7,8 @@ import { MatToolbarModule, MatCardModule, MatTableModule } from '@angular/materi
 
 @NgModule({
   declarations: [
-    AppComponent
-    TableComponent
+    AppComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,
