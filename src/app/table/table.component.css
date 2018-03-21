@@ -31,12 +31,16 @@
 }
 
 /* Page loads with only data display values, hide form inputs */
-[class^="form"] {
+/* [class^="form"] {
   visibility: hidden;
-}
+} */
 
 /* Need to make the elements for display and input overlap */
-div[class^="cell"] {
+/* div[class^="cell"] {
     position: absolute;
     margin-top: 20px;
+} */
+
+.highlight{
+  background: #42A948; /* green */
 }

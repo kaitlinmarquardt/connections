@@ -12,10 +12,13 @@
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
       <mat-cell *matCellDef="let connection">
-        <div class="cell{{connection.id}}">{{connection.name}}</div>
-        <mat-form-field class="form{{connection.id}}">
+        <app-table-cell [cellvalue]="connection.name" [selected]="connection.id === selectedRowIndex"></app-table-cell>
+        <!-- <div *ngIf="connection.id != selectedRowIndex" class="cell{{connection.id}}">{{connection.name}}</div> -->
+        <!-- <div *ngIf="connection.id === selectedRowIndex"> -->
+        <!-- <mat-form-field *ngIf="connection.id === selectedRowIndex" class="form{{connection.id}}">
           <input matInput [(ngModel)]="connection.name">
-        </mat-form-field>
+        </mat-form-field> -->
+      <!-- </div> -->
       </mat-cell>
     </ng-container>
 
@@ -90,6 +93,7 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row id="row{{row.id}}"
       *matRowDef="let row; columns: displayedColumns;"
+      [ngClass]="{'handleRowClick': selectedRowIndex == row.id}"
       (click)="handleRowClick(row)">
     </mat-row>
 

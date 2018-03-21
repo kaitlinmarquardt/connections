@@ -1,0 +1,4 @@
+<div *ngIf="!selected">{{cellvalue}}</div>
+<mat-form-field *ngIf="selected">
+    <input matInput [(ngModel)]="cellvalue">
+</mat-form-field>

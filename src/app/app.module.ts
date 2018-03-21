@@ -17,14 +17,14 @@ import {
   MatIconModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { TableRowComponent } from './table-row/table-row.component';
 import { FormsModule } from '@angular/forms';
+import { TableCellComponent } from './table-cell/table-cell.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
-    // TableRowComponent,
+    TableCellComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { connection } from './connection';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,8 @@ export class AppComponent {
   title = 'Connections';
 
   newRow() {
-    alert("button clicked!");
+    
+    // alert("button clicked!");
   }
 
 }

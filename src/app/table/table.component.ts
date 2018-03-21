@@ -18,11 +18,17 @@ export class TableComponent {
   methods = ['HTTPS', 'TCP'];
   requests = ['PUT', 'POST'];
   dataSource = new MatTableDataSource(connections);
+  // selectedRow: Row; // Object structure initialized?
+  // this.selectedRow = undefined;
+
+  selectedRowIndex: number = -1;
 
   // Convert row into form
   handleRowClick(row) {
-    console.log(row.id);
-    console.log(this);
+    this.selectedRowIndex = row.id;
+    // this.selectedRow = row;
+    console.log(row);
+    // console.log(this);
     // alert("Row clicked!");
 
     // Hide existing cell value div, show form input
@@ -31,8 +37,6 @@ export class TableComponent {
     // $(".cell").css = ("visibility", "hidden");
     // $('.form'+String(row.id)).style.visibility = "visible";
     // If this is unclicking another row..
-
-
     // this.selectedConnection = connection;
   }
 
