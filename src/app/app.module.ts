@@ -19,6 +19,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { TableCellComponent } from './table-cell/table-cell.component';
+import { ConnectionService } from './connection.service'
 
 @NgModule({
   declarations: [
@@ -42,10 +43,11 @@ import { TableCellComponent } from './table-cell/table-cell.component';
     BrowserAnimationsModule,
     FormsModule
   ],
-  // exports: [
-  //   MatTable
-  // ],
-  providers: [],
+  exports: [
+  ],
+  providers: [
+    ConnectionService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

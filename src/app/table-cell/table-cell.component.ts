@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { connection } from './connection';
+import { connection, CONNECTIONOPTIONS } from './connection';
 
 @Component({
   selector: 'app-table-cell',
@@ -7,15 +7,15 @@ import { connection } from './connection';
   styleUrls: ['./table-cell.component.css']
 })
 
-// Optional third value is dropdown list
 export class TableCellComponent {
-  // @Input() row: Row;
-  @Input('cellvalue') cellvalue: string;
+  @Input('connection') connection: Connection[];
+  @Input('column') column: string;
+  @Input('options') options: list;
   @Input('selected') selected: boolean;
-  // column = 'test';
+
   constructor() { }
 
   ngOnInit() {
   }
-
+  
 }

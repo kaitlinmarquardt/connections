@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { connection } from './connection';
+
+import { Connection, CONNECTIONS, OPTIONS } from '../connection';
+import { ConnectionService } from '../connection.service';
 
 /**
  * @title Table
@@ -11,33 +13,31 @@ import { connection } from './connection';
   styleUrls: ['./table.component.css']
 })
 
-export class TableComponent {
+export class TableComponent implements OnInit {
+  // Could change this list for column selection feature,
+  // would have to change the loop in the table template though
+  // I would add a column for display/hide in the OPTIONS object and the database
   displayedColumns = ['name', 'status', 'method', 'request', 'port', 'address'];
-  // These constants could be in connection.ts and set up with a service
-  statuses = ['Running', 'Paused', 'Stopped']; // To do: green/yellow/red or maybe icons
-  methods = ['HTTPS', 'TCP'];
-  requests = ['PUT', 'POST'];
-  dataSource = new MatTableDataSource(connections);
-  // selectedRow: Row; // Object structure initialized?
-  // this.selectedRow = undefined;
-
+  options = OPTIONS;
+  dataSource = new MatTableDataSource(CONNECTIONS); // Timing issue with service...
   selectedRowIndex: number = -1;
 
-  // Convert row into form
+  connections: Connection[];
+  constructor(private connectionService: ConnectionService) { }
+  ngOnInit() {
+    this.getConnections();
+  }
+  getConnections(): void {
+    this.connections = this.connectionService.getConnections();
+    // If fetching from server with Observable:
+    // this.connectionService.getConnections();
+      // .subscribe(connections => this.connections = connections);
+  }
+
+  // Convert row into form, happens at table-cell level
   handleRowClick(row) {
     this.selectedRowIndex = row.id;
-    // this.selectedRow = row;
     console.log(row);
-    // console.log(this);
-    // alert("Row clicked!");
-
-    // Hide existing cell value div, show form input
-    // Don't want to use toggle, in case they click in same row
-    // Document.getElementsByClassName(".mat-cell").css = ("visibility", "hidden")
-    // $(".cell").css = ("visibility", "hidden");
-    // $('.form'+String(row.id)).style.visibility = "visible";
-    // If this is unclicking another row..
-    // this.selectedConnection = connection;
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -68,12 +68,3 @@ export interface Connection {
   request: string;
   address: string;
 }
-
-export const connections: Connection[] = [
-  {id: '1', name: 'Test', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
-  {id: '2', name: 'Test2', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
-  {id: '3', name: 'Test3', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
-  {id: '4', name: 'Connection', status: 'Paused', method: 'HTTPS', request: 'PUT', port: '', address: 'www.connection.com'},
-  {id: '5', name: 'Saint Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.sthospital.com'},
-  {id: '6', name: 'Satan Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.satanhospital.com'},
-];

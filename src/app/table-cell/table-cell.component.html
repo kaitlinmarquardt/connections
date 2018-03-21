@@ -1,4 +1,9 @@
-<div *ngIf="!selected">{{cellvalue}}</div>
+<!-- Checks if the row is selected and there are dropdown options available-->
+<div *ngIf="!selected">{{connection[column]}}</div>
 <mat-form-field *ngIf="selected">
-    <input matInput [(ngModel)]="cellvalue">
+  <input *ngIf="options.length === 0" matInput [(ngModel)]="connection[column]">
+  <mat-select *ngIf="options.length > 0" class="form-control" id="column"
+    [(ngModel)]="connection[column]" name="column">
+    <mat-option *ngFor="let option of options" [value]="option">{{option}}</mat-option>
+  </mat-select>
 </mat-form-field>
