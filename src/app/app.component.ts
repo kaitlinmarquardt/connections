@@ -12,8 +12,5 @@ export class AppComponent {
   newRow() {
     alert("button clicked!");
   }
-  //
-  // tableClick() {
-  //   alert("ugh");
-  // }
+
 }

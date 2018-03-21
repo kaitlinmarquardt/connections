@@ -12,14 +12,6 @@ import { connection } from './connection';
 })
 
 export class TableComponent {
-  handleTableClick() {
-    alert("Table clicked!");
-  }
-
-  handleCellClick() {
-    alert("Cell clicked!");
-  }
-
   displayedColumns = ['name', 'status', 'method', 'request', 'port', 'address'];
   // These constants could be in connection.ts and set up with a service
   statuses = ['Running', 'Paused', 'Stopped']; // To do: green/yellow/red or maybe icons
@@ -27,9 +19,20 @@ export class TableComponent {
   requests = ['PUT', 'POST'];
   dataSource = new MatTableDataSource(connections);
 
-  handleRowClick() {
-    alert("Row clicked!");
-    console.log("here");
+  // Convert row into form
+  handleRowClick(row) {
+    console.log(row.id);
+    console.log(this);
+    // alert("Row clicked!");
+
+    // Hide existing cell value div, show form input
+    // Don't want to use toggle, in case they click in same row
+    // Document.getElementsByClassName(".mat-cell").css = ("visibility", "hidden")
+    // $(".cell").css = ("visibility", "hidden");
+    // $('.form'+String(row.id)).style.visibility = "visible";
+    // If this is unclicking another row..
+
+
     // this.selectedConnection = connection;
   }
 
@@ -50,17 +53,10 @@ export class TableComponent {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-
-  // TODO: Remove this when we're done
-  // get diagnostic() { return JSON.stringify(this.model); }
-
-  setName(nameInput: string) {
-    alert("name was set");
-  }
-
 }
 
 export interface Connection {
+  id: number;
   name: string;
   status: string;
   method: string;
@@ -70,10 +66,10 @@ export interface Connection {
 }
 
 export const connections: Connection[] = [
-  {name: 'Test', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
-  {name: 'Test2', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
-  {name: 'Test3', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
-  {name: 'Connection', status: 'Paused', method: 'HTTPS', request: 'PUT', port: '', address: 'www.connection.com'},
-  {name: 'Saint Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.sthospital.com'},
-  {name: 'Satan Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.satanhospital.com'},
+  {id: '1', name: 'Test', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
+  {id: '2', name: 'Test2', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
+  {id: '3', name: 'Test3', status: 'Running', method: 'TCP', request: '', port: '9747', address: '127.0.0.1'},
+  {id: '4', name: 'Connection', status: 'Paused', method: 'HTTPS', request: 'PUT', port: '', address: 'www.connection.com'},
+  {id: '5', name: 'Saint Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.sthospital.com'},
+  {id: '6', name: 'Satan Hospital', status: 'Stopped', method: 'HTTPS', request: 'POST', port: '', address: 'www.satanhospital.com'},
 ];
