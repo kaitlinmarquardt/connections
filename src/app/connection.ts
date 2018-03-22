@@ -1,29 +1,33 @@
+// I could add a selected option to this class
 export class Connection {
-  public id: number,
-  public name: string,
-  public status: string,
-  public method: string,
-  public port?: number,
-  public request?: string,
-  public address: string,
+  constructor(
+    public id: number,
+    public name: string,
+    public status: string,
+    public method: string,
+    public port?: number,
+    public request?: string,
+    public address: string,
+  ) {  }
 }
 
 // Maybe this class can be private, not sure if it would effect html call
 // Could add a visible option for this
 export class ColumnOption {
-  public name: string, // the variable name this links to
-  public header: string,
-  public options: list,
+  name: string; // the variable name this links to
+  header: string;
+  options: list;
+  colors: list;
 }
 
-// If it's a string input it's empty
+// Defines headers and dropdown options for the table
 export const OPTIONS: ColumnOption[] = [
-  {name: 'name', header: 'Name', options: []},
-  {name: 'status', header: 'Status' , options: ['Running', 'Paused', 'Stopped']}, // To do: green/yellow/red or maybe icons
-  {name: 'method', header: 'Communication Method' , options: ['HTTPS', 'TCP']},
-  {name: 'port', header: 'Port' , options: []},
-  {name: 'request', header: 'Request' , options: ['PUT', 'POST']},
-  {name: 'address', header: 'IP or URL Address', options: []},
+  {name: 'name', header: 'Name', options: [], colors: []},
+  {name: 'status', header: 'Status' , options: ['Running', 'Paused', 'Stopped'], colors: ['green', 'yellow', 'red']},
+  {name: 'method', header: 'Communication Method' , options: ['HTTPS', 'TCP'], colors: []},
+  {name: 'request', header: 'Request' , options: ['PUT', 'POST'], colors: []},
+  {name: 'port', header: 'Port' , options: [], colors: []},
+  {name: 'address', header: 'IP or URL Address', options: [], colors: []},
 ]
 
 export const CONNECTIONS: Connection[] = [

@@ -1,4 +1,4 @@
-<!-- This is a search filter, potential feature but seemed unnecessary now -->
+<!-- This is a search filter, potential feature -->
 <!-- <div class="table-header">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
@@ -7,7 +7,7 @@
 
 <div class="table-container mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort>
-    
+
     <!-- Loops through columns, displaying form input if row is selected -->
     <div *ngFor="let column of displayedColumns; let i = index">
       <ng-container [matColumnDef]="column">
@@ -18,6 +18,7 @@
             [column]="column"
             [options]="options[i].options"
             [selected]="connection.id === selectedRowIndex">
+            <!-- [colors]="options[i].colors" -->
           </app-table-cell>
         </mat-cell>
       </ng-container>

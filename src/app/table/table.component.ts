@@ -1,6 +1,9 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+
 import { Connection, CONNECTIONS, OPTIONS } from '../connection';
 import { ConnectionService } from '../connection.service';
 
@@ -13,30 +16,28 @@ import { ConnectionService } from '../connection.service';
   styleUrls: ['./table.component.css']
 })
 
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnChanges {
   // Could change this list for column selection feature,
   // would have to change the loop in the table template though
   // I would add a column for display/hide in the OPTIONS object and the database
+  // This has to match the order in OPTIONS
   displayedColumns = ['name', 'status', 'method', 'request', 'port', 'address'];
   options = OPTIONS;
-  dataSource = new MatTableDataSource(CONNECTIONS); // Timing issue with service...
+  dataSource = new ConnectionDataSource(this.connectionService);
   selectedRowIndex: number = -1;
 
-  connections: Connection[];
   constructor(private connectionService: ConnectionService) { }
-  ngOnInit() {
-    this.getConnections();
-  }
-  getConnections(): void {
-    this.connections = this.connectionService.getConnections();
-    // If fetching from server with Observable:
-    // this.connectionService.getConnections();
-      // .subscribe(connections => this.connections = connections);
-  }
+
+  ngOnChanges() { }
+
+  ngOnInit(): void { }
+
 
   // Convert row into form, happens at table-cell level
   handleRowClick(row) {
     this.selectedRowIndex = row.id;
+    // this.connectionService.upDateConnection();
+    console.log("row clicked")
     console.log(row);
   }
 
@@ -52,19 +53,20 @@ export class TableComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-  }
+  // Optional, filter is hidden right now
+  // applyFilter(filterValue: string) {
+  //   filterValue = filterValue.trim(); // Remove whitespace
+  //   filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+  //   this.dataSource.filter = filterValue;
+  // }
 }
 
-export interface Connection {
-  id: number;
-  name: string;
-  status: string;
-  method: string;
-  port: number;
-  request: string;
-  address: string;
+export class ConnectionDataSource extends MatTableDataSource<any> {
+  constructor(private connectionService: ConnectionService) {
+    super();
+  }
+  connect(): Observable<Connection[]> {
+    return this.connectionService.connectionChange;
+  }
+  disconnect() {}
 }

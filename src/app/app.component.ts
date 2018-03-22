@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { connection } from './connection';
+
+import { Connection, CONNECTIONS } from './connection';
+import { ConnectionService } from './connection.service';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +12,10 @@ import { connection } from './connection';
 export class AppComponent {
   title = 'Connections';
 
-  newRow() {
-    
-    // alert("button clicked!");
+  constructor(private connectionService: ConnectionService) { }
+
+  newConnection() {
+    this.connectionService.addConnection();
   }
 
 }
