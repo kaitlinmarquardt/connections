@@ -1,9 +1,17 @@
-<!-- Checks if the row is selected and there are dropdown options available-->
-<div *ngIf="!selected">{{connection[column]}}</div>
-<mat-form-field *ngIf="selected">
-  <input *ngIf="options.length === 0" matInput [(ngModel)]="connection[column]">
-  <mat-select *ngIf="options.length > 0" class="form-control" id="column"
-    [(ngModel)]="connection[column]" name="column">
-    <mat-option *ngFor="let option of options" [value]="option">{{option}}</mat-option>
-  </mat-select>
-</mat-form-field>
+<!-- If TCP or HTTPS is selected, disables request or port -->
+<!-- <div *ngIf="column != 'request' && column != 'port'"> -->
+  <!-- Checks if the row is selected and there are dropdown options available-->
+  <div *ngIf="!selected || (connection.method == 'TCP' && column == 'request') || (connection.method == 'HTTPS' && column == 'port')">
+    {{connection[column]}}
+  </div>
+  <!-- This is just the opposite of above -->
+  <mat-form-field *ngIf="!(!selected || (connection.method == 'TCP' && column == 'request') || (connection.method == 'HTTPS' && column == 'port'))">
+    <input *ngIf="options.length == 0" matInput [(ngModel)]="connection[column]">
+    <mat-select *ngIf="options.length > 0" class="form-control" id="column"
+      required
+      [(ngModel)]="connection[column]" name="column">
+      <mat-option *ngFor="let option of options" [value]="option">{{option}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+<!-- </div> -->
+<!-- <div *ngIf="column == 'request' "></div> -->

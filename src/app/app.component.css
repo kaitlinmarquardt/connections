@@ -1,4 +1,6 @@
 .mat-toolbar {
+  background-color: #00b588;
+  color: white;
   height: 128px;
   padding: 80px 32px 32px 128px;
   font-size: 24px;
@@ -6,6 +8,7 @@
 }
 
 .mat-fab {
+  background-color: #0e2134;
   position: absolute;
   top: 100px;
   left: 32px;

@@ -32,13 +32,18 @@ export class TableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void { }
 
+  // I need code that clears another cell
 
   // Convert row into form, happens at table-cell level
-  handleRowClick(row) {
-    this.selectedRowIndex = row.id;
+  handleRowClick(connection) {
+    // if (row.status == "Running") {
+    //
+    // } else {
+      this.selectedRowIndex = connection.id;
+    // }
     // this.connectionService.upDateConnection();
     console.log("row clicked")
-    console.log(row);
+    console.log(connection);
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
