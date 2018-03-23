@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { connection, CONNECTIONOPTIONS } from './connection';
-import {FormControl, Validators} from '@angular/forms';
+import { Connection } from './connection';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-table-cell',
@@ -14,13 +14,38 @@ export class TableCellComponent {
   @Input('options') options: list;
   @Input('selected') selected: boolean;
 
-  constructor() { }
+  connectionForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.createForm();
+  }
+
+  createForm() {
+    this.connectionForm = this.fb.group({
+      name: ['', Validators.required ],
+      status: ['', Validators.required ],
+      method: ['', Validators.required ],
+      request: '',
+      port: '',
+      address: ['', Validators.required ]
+    });
+    console.log(this.connectionForm);
+  }
+    // var name = new FormControl('', [Validators.required]);
+
+    // getErrorMessage() {
+    //   // console.log("uh oh error");
+    //   return this.column.hasError('required') ? 'You must enter a value' : '';
+    // }
 
   ngOnInit() {
   }
 
   // Need to clear port or request fields if method changes
   onTableCellChange() {
+    // Need to switch validation?
+    console.log("cell change");
+    console.log(this.connectionForm.request);
     if (this.column == "method") {
       if (this.connection.method == "TCP") {
         this.connection.request = "";
@@ -29,13 +54,4 @@ export class TableCellComponent {
       }
     }
   }
-
-  // email = new FormControl('', [Validators.required, Validators.email]);
-  //
-  // getErrorMessage() {
-  //   return this.email.hasError('required') ? 'You must enter a value' :
-  //     this.email.hasError('email') ? 'Not a valid email' :
-  //         '';
-  // }
-
 }

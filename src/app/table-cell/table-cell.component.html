@@ -7,13 +7,20 @@
   {{connection[column]}}
 </div>
 
+<form (ngSubmit)="onSubmit()" #connectionForm="ngForm">
+  <!-- [formGroup]="connectionForm" -->
 <!-- This is just the opposite of above -->
 <mat-form-field *ngIf="!(!selected || (connection.method == 'TCP' && column == 'request') || (connection.method == 'HTTPS' && column == 'port'))">
   <!-- Input text field -->
-  <input *ngIf="options.length == 0 && column != 'save'"
-    matInput [(ngModel)]="connection[column]">
-    <!-- [formControl]="column" -->    
-  <!-- <mat-error *ngIf="column.invalid">{{getErrorMessage()}}</mat-error> -->
+  <input matInput *ngIf="options.length == 0 && column != 'save'"
+    type="text" class="form-control" id="column"
+    required
+    [(ngModel)]="connection[column]" name="column"
+    #[column]="ngModel">
+    <!--     formControlName="column"
+        [formControl]="column" -->
+        <!-- <div>{{connectionForm.status}}</div> -->
+  <mat-error *ngIf="connectionForm.status">This field is required</mat-error>
 
   <!-- Selection dropdown -->
   <mat-select *ngIf="options.length > 0" class="form-control" id="column"
@@ -23,3 +30,4 @@
   </mat-select>
   <!-- Error handling for required here -->
 </mat-form-field>
+</form>

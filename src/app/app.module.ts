@@ -18,7 +18,7 @@ import {
   MatDialogModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableCellComponent } from './table-cell/table-cell.component';
 import { ConnectionService } from './connection.service'
 
@@ -44,7 +44,8 @@ import { ConnectionService } from './connection.service'
     MatIconModule,
     MatDialogModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
   ],
