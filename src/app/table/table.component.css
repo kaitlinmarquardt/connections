@@ -30,17 +30,12 @@
   margin-right: 20px;
 }
 
-/* Page loads with only data display values, hide form inputs */
-/* [class^="form"] {
-  visibility: hidden;
-} */
+/* Table column width adjustment */
+.mat-column-name, .mat-column-address {
+  flex: 0 0 200px;
+}
 
-/* Need to make the elements for display and input overlap */
-/* div[class^="cell"] {
-    position: absolute;
-    margin-top: 20px;
-} */
-
-.highlight{
-  background: #42A948; /* green */
+.saveButton {
+  color: blue;
+  float: right;
 }

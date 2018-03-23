@@ -28,6 +28,7 @@ export const OPTIONS: ColumnOption[] = [
   {name: 'request', header: 'Request' , options: ['PUT', 'POST'], colors: []},
   {name: 'port', header: 'Port' , options: [], colors: []},
   {name: 'address', header: 'IP or URL Address', options: [], colors: []},
+  {name: 'save', header: '', options: [], colors: []}
 ]
 
 export const CONNECTIONS: Connection[] = [

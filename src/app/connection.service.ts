@@ -28,9 +28,10 @@ export class ConnectionService {
     return (maxID+1);
   }
 
+  // Not used because of 2 way data binding at the cell level
   updateConnection(connection: Connection) {
     console.log("update connection");
-    this.ConnectionDataSource.next(connection);
+    // this.ConnectionDataSource.next(connection);
   }
 
 }

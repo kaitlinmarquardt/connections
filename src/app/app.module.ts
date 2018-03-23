@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { TableComponent } from './table/table.component';
+import { TableComponent, RunningStatusDialogComponent } from './table/table.component';
 import {
   MatToolbarModule,
   MatCardModule,
@@ -14,7 +14,8 @@ import {
   MatPaginatorModule,
   MatSortModule,
   MatButtonModule,
-  MatIconModule
+  MatIconModule,
+  MatDialogModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -26,6 +27,7 @@ import { ConnectionService } from './connection.service'
     AppComponent,
     TableComponent,
     TableCellComponent,
+    RunningStatusDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,10 +42,14 @@ import { ConnectionService } from './connection.service'
     MatSortModule,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
     BrowserAnimationsModule,
     FormsModule
   ],
   exports: [
+  ],
+  entryComponents: [
+    RunningStatusDialogComponent
   ],
   providers: [
     ConnectionService,

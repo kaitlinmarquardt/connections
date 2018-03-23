@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { connection, CONNECTIONOPTIONS } from './connection';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-table-cell',
@@ -17,5 +18,24 @@ export class TableCellComponent {
 
   ngOnInit() {
   }
-  
+
+  // Need to clear port or request fields if method changes
+  onTableCellChange() {
+    if (this.column == "method") {
+      if (this.connection.method == "TCP") {
+        this.connection.request = "";
+      } else { // HTTPS
+        this.connection.port = "";
+      }
+    }
+  }
+
+  // email = new FormControl('', [Validators.required, Validators.email]);
+  //
+  // getErrorMessage() {
+  //   return this.email.hasError('required') ? 'You must enter a value' :
+  //     this.email.hasError('email') ? 'Not a valid email' :
+  //         '';
+  // }
+
 }

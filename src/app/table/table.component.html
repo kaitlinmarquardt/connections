@@ -13,13 +13,19 @@
       <ng-container [matColumnDef]="column">
         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ options[i].header }}</mat-header-cell>
         <mat-cell *matCellDef="let connection">
-          <app-table-cell
+          <app-table-cell *ngIf="column != 'save'"
             [connection]="connection"
             [column]="column"
             [options]="options[i].options"
-            [selected]="connection.id === selectedRowIndex">
+            [selected]="connection.id == selectedRowIndex">
+            <!-- (click)="tableCellClick(connection, column)" -->
             <!-- [colors]="options[i].colors" -->
           </app-table-cell>
+          <!-- Save button -->
+          <button mat-button class="saveButton"
+            *ngIf="connection.id == selectedRowIndex && column == 'save'" (click)="saveConnectionClick()">
+            Save
+          </button>
         </mat-cell>
       </ng-container>
     </div>

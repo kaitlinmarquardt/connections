@@ -15,7 +15,9 @@ export class AppComponent {
   constructor(private connectionService: ConnectionService) { }
 
   newConnection() {
-    this.connectionService.addConnection();
+    let newConnectionID = this.connectionService.addConnection();
+    console.log("new connection");
+    console.log(newConnectionID);
   }
 
 }
