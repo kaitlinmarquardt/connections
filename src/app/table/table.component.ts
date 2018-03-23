@@ -1,6 +1,8 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { merge } from 'rxjs/observable/merge';
@@ -12,6 +14,7 @@ import { switchMap } from 'rxjs/operators/switchMap';
 
 import { Connection, CONNECTIONS, OPTIONS } from '../connection';
 import { ConnectionService } from '../connection.service';
+import { TableCellComponent } from './table-cell.component';
 
 /**
  * @title Table
@@ -32,14 +35,27 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   selectedRowIndex: number = -1;
   savingConnection = false;
 
-  // resultsLength = 0;
-  // isLoadingResults = true;
-  // isRateLimitReached = false;
+  connectionForm: FormGroup;
+
+  createForm() {
+    this.connectionForm = this.fb.group({
+      name: ['', Validators.required ],
+      status: ['', Validators.required ],
+      method: ['', Validators.required ],
+      request: '',
+      port: '',
+      address: ['', Validators.required ]
+    });
+    console.log(this.connectionForm);
+  }
 
   constructor(
     public dialog: MatDialog,
     public connectionService: ConnectionService
-  ) { }
+    private fb: FormBuilder) {
+      this.createForm();
+  }
+
 
   ngOnChanges() { console.log("ngOnChanges"); }
 
@@ -49,33 +65,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit() {
-    // this.dataSource = new ConnectionDataSource(this.connectionService);
-    // // If the user changes the sort order, reset back to the first page.
-    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    //
-    // merge(this.sort.sortChange, this.paginator.page)
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap(() => {
-    //       this.isLoadingResults = true;
-    //       return this.exampleDatabase!.getRepoIssues(
-    //         this.sort.active, this.sort.direction, this.paginator.pageIndex);
-    //     }),
-    //     map(data => {
-    //       // Flip flag to show that loading has finished.
-    //       this.isLoadingResults = false;
-    //       this.isRateLimitReached = false;
-    //       this.resultsLength = data.total_count;
-    //
-    //       return data.items;
-    //     }),
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       // Catch if the GitHub API has reached its rate limit. Return empty data.
-    //       this.isRateLimitReached = true;
-    //       return observableOf([]);
-    //     })
-    //   ).subscribe(data => this.dataSource.data = data);
+    this.connectionForm.valueChanges.subscribe(val => {
+      console.log("subscription");
+      console.log(val);
+    });
   }
 
   // Convert row into form, happens at table-cell level
@@ -110,26 +103,22 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   saveConnectionClick() {
     this.savingConnection = true;
     console.log("save connection");
+    console.log(this.connectionForm.status);
+    console.log(this.connectionFormValid);
     // Potential database edit through the service
     // this.connectionService.upDateConnection();
   }
 
-  // Need to clear port or request fields if method changes
-  // tableCellClick(connection, column) {
-  //   if (column == "method") {
-  //     console.log("method cell clicked");
-  //   }
-  // }
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  // @ViewChild() sort: MatSort;
 
   /**
    * Set the paginator and sort after the view init since this component will
    * be able to query its view for the initialized paginator and sort.
    */
   ngAfterViewInit() {
-    console.log("after view");
+    // console.log("after view");
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
@@ -169,11 +158,6 @@ export class ConnectionDataSource extends MatTableDataSource<any> {
   }
 
   disconnect() {}
-
-  // loadConnections(connectionId: number, filter: string,
-  //               sortDirection: string, pageIndex: number, pageSize: number) {
-  //     ...
-  //   }
 }
 
 @Component({
@@ -202,4 +186,9 @@ export class RunningStatusDialogComponent {
   onStopClick(): void {
     this.dialogRef.close("Stopped");
   }
+}
+
+// Receives form validation from table cell
+export class TableCellComponent implements OnInit {
+  private connectionFormValid: boolean;
 }

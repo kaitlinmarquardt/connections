@@ -5,8 +5,8 @@
   </mat-form-field>
 </div> -->
 
-
 <div class="table-container mat-elevation-z8">
+  <form (ngSubmit)="onSubmit(connectionForm)" #connectionForm="ngForm">
   <mat-table #table [dataSource]="dataSource" matSort>
 
     <!-- Loops through columns, displaying form input if row is selected -->
@@ -14,17 +14,22 @@
       <ng-container [matColumnDef]="column">
         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ options[i].header }}</mat-header-cell>
         <mat-cell *matCellDef="let connection">
-          <app-table-cell *ngIf="column != 'save'"
+          <app-table-cell #tableCell *ngIf="column != 'save'"
             [connection]="connection"
             [column]="column"
             [options]="options[i].options"
-            [selected]="connection.id == selectedRowIndex">
-            <!-- (click)="tableCellClick(connection, column)" -->
-            <!-- [colors]="options[i].colors" -->
+            [selected]="connection.id == selectedRowIndex"
+            [tableCellConnectionForm]="connectionForm"
+            (connectionFormValidChange)="connectionFormValid = $event">
+            <!-- Trying to pass the form validation back into here... -->
+            <!-- (validityChange)="tableCellFormValid = $event" -->
+            <!-- #connectionForm="connectionForm" -->
           </app-table-cell>
           <!-- Save button -->
-          <button mat-button class="saveButton"
-            *ngIf="connection.id == selectedRowIndex && column == 'save'" (click)="saveConnectionClick()">
+          <button mat-button class="saveButton" type="submit"
+            *ngIf="connection.id == selectedRowIndex && column == 'save'"
+            [disabled]="connectionFormValid"
+            (click)="saveConnectionClick()">
             Save
           </button>
         </mat-cell>
@@ -39,6 +44,6 @@
       (click)="handleRowClick(row)">
     </mat-row>
   </mat-table>
-
+</form>
   <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
 </div>

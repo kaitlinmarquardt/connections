@@ -36,6 +36,8 @@
 }
 
 .saveButton {
-  color: blue;
+  background-color: #00b588;
+  color: white;
+  /* color: blue; */
   float: right;
 }

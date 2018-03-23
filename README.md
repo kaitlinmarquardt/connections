@@ -1,4 +1,19 @@
-# MyApp
+# Connections Interface
+
+## Summary
+
+Angular material design table for viewing, creating and editing connections.
+
+## To Do:
+
+[ ] Get form validation to pass from table cell to table component for save button validation
+
+[ ] Two-way data binding using a service breaks the paginator/sorting. I can grab a link, but it looks like this is an open issue(s) for angular material tables.
+
+[ ] Colors for the connection status
+
+[ ] Intro with instructions and an option to fill with the sample data
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
 

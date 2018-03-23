@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { Connection } from './connection';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -8,44 +8,33 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
   styleUrls: ['./table-cell.component.css']
 })
 
-export class TableCellComponent {
+export class TableCellComponent implements OnInit {
   @Input('connection') connection: Connection[];
   @Input('column') column: string;
   @Input('options') options: list;
   @Input('selected') selected: boolean;
-
-  connectionForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.createForm();
-  }
-
-  createForm() {
-    this.connectionForm = this.fb.group({
-      name: ['', Validators.required ],
-      status: ['', Validators.required ],
-      method: ['', Validators.required ],
-      request: '',
-      port: '',
-      address: ['', Validators.required ]
-    });
-    console.log(this.connectionForm);
-  }
-    // var name = new FormControl('', [Validators.required]);
-
-    // getErrorMessage() {
-    //   // console.log("uh oh error");
-    //   return this.column.hasError('required') ? 'You must enter a value' : '';
-    // }
+  @Input('tableCellConnectionForm') tableCellConnectionForm: NgForm;
+  @Output() connectionFormValidChange = new EventEmitter<boolean>();
+  private validStatus: boolean;
 
   ngOnInit() {
+    // console.log("valid status"+validStatus);
+    // if (!this.tableCellConnectionForm) return;
+    this.tableCellConnectionForm.valueChanges
+      .subscribe(val => {
+        if(this.validStatus !== this.tableCellConnectionForm.valid) {
+          console.log("table cell subscription");
+          console.log(val);
+          this.validStatus = this.tableCellConnectionForm.valid;
+          this.connectionFormValidChange.emit(this.tableCellConnectionForm.valid);
+      });
   }
 
   // Need to clear port or request fields if method changes
-  onTableCellChange() {
+  onTableCellSelectionChange() {
     // Need to switch validation?
-    console.log("cell change");
-    console.log(this.connectionForm.request);
+    console.log("selection cell change");
+    console.log(this.tableCellConnectionForm.valid);
     if (this.column == "method") {
       if (this.connection.method == "TCP") {
         this.connection.request = "";
@@ -53,5 +42,13 @@ export class TableCellComponent {
         this.connection.port = "";
       }
     }
+  }
+
+  // Need to clear port or request fields if method changes
+  onTableCellInputChange() {
+    // Need to switch validation?
+    console.log("input cell change");
+    // console.log(this.tableCellConnectionForm.valid);
+    // this.connectionFormValidChange.emit(this.tableCellConnectionForm.valid);
   }
 }
