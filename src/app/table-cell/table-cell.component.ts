@@ -8,46 +8,51 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
   styleUrls: ['./table-cell.component.css']
 })
 
-export class TableCellComponent implements OnInit {
+export class TableCellComponent implements OnInit, OnChanges {
   @Input('connection') connection: Connection[];
   @Input('column') column: string;
   @Input('options') options: list;
   @Input('selected') selected: boolean;
-  @Input('tableCellConnectionForm') tableCellConnectionForm: NgForm;
-  @Output() connectionFormValidChange = new EventEmitter<boolean>();
-  private validStatus: boolean;
+  @Input('connectionForm') connectionForm: FormGroup;
+  @Output() isCellFormValid = new EventEmitter<boolean>();
+  // private isValid: boolean;
 
+  constructor() {
+
+  }
   ngOnInit() {
-    // console.log("valid status"+validStatus);
-    // if (!this.tableCellConnectionForm) return;
-    this.tableCellConnectionForm.valueChanges
-      .subscribe(val => {
-        if(this.validStatus !== this.tableCellConnectionForm.valid) {
-          console.log("table cell subscription");
-          console.log(val);
-          this.validStatus = this.tableCellConnectionForm.valid;
-          this.connectionFormValidChange.emit(this.tableCellConnectionForm.valid);
-      });
+    this.connectionForm.valueChanges.subscribe(() => {
+          this.isCellFormValid.emit(this.connectionForm.valid)
+        });
+  }
+
+  ngOnChanges() {
+    // console.log("on changes");
+    // console.log(this.connectionForm.form.valid);
   }
 
   // Need to clear port or request fields if method changes
-  onTableCellSelectionChange() {
+  onTableCellSelectionChange(connection) {
     // Need to switch validation?
-    console.log("selection cell change");
-    console.log(this.tableCellConnectionForm.valid);
+
+    // console.log(this.connectionForm.valid);
     if (this.column == "method") {
-      if (this.connection.method == "TCP") {
-        this.connection.request = "";
-      } else { // HTTPS
-        this.connection.port = "";
-      }
+      console.log("selection cell method change");
+      // if (connection.method == "TCP") {
+      //   connection.request = "";
+      // } else { // HTTPS
+      //   connection.port = "";
+      // }
     }
+    // console.log(connection);
   }
 
   // Need to clear port or request fields if method changes
-  onTableCellInputChange() {
+  onTableCellInputChange(inputConnectionForm) {
     // Need to switch validation?
-    console.log("input cell change");
+    // console.log("input cell change");
+    // console.log(this.connectionForm.valid);
+    // console.log(this.inputConnectionForm.status);
     // console.log(this.tableCellConnectionForm.valid);
     // this.connectionFormValidChange.emit(this.tableCellConnectionForm.valid);
   }

@@ -16,8 +16,6 @@ export class AppComponent {
 
   newConnection() {
     let newConnectionID = this.connectionService.addConnection();
-    console.log("new connection");
-    console.log(newConnectionID);
   }
 
 }

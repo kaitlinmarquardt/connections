@@ -34,8 +34,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   dataSource = new ConnectionDataSource(this.connectionService);
   selectedRowIndex: number = -1;
   savingConnection = false;
+  private connectionFormValid: boolean;
 
   connectionForm: FormGroup;
+
+  constructor(
+    public dialog: MatDialog,
+    private connectionService: ConnectionService
+    private fb: FormBuilder) {
+      this.createForm();
+  }
 
   createForm() {
     this.connectionForm = this.fb.group({
@@ -46,67 +54,94 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       port: '',
       address: ['', Validators.required ]
     });
-    console.log(this.connectionForm);
+    // console.log(this.connectionForm);
+
   }
 
-  constructor(
-    public dialog: MatDialog,
-    public connectionService: ConnectionService
-    private fb: FormBuilder) {
-      this.createForm();
+  ngOnChanges() {
+    // console.log("on changes");
+    // rebuildForm();
+    // console.log(this.dataSource);
+    // this.connectionForm.reset({this.connection});
+    // this.rebuildForm();
   }
 
-
-  ngOnChanges() { console.log("ngOnChanges"); }
-
-  update($event) {
-    console.log("update");
-    console.log($event, $event.target, $event.currentTarget);
+  rebuildForm(connection) {
+    this.connectionForm.reset({
+      name: connection.name,
+      status: connection.status,
+      method: connection.method,
+      request: connection.request,
+      port: connection.port,
+      address: connection.address
+    });
   }
 
   ngOnInit() {
-    this.connectionForm.valueChanges.subscribe(val => {
-      console.log("subscription");
-      console.log(val);
-    });
+    // Make port or request required based on method selected
+    this.connectionForm.get('method').valueChanges.subscribe(
+      (method: string) => {
+        console.log("method subscription change");
+        if (method == 'TCP') {
+          this.connectionForm.get('request').setValidators();
+          this.connectionForm.get('port').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+          this.connectionForm.patchValue({request: ''});
+          // connection.request = '';
+          this.connectionForm.get('port').updateValueAndValidity();
+        } else if (method == 'HTTPS') {
+          this.connectionForm.get('port').setValidators();
+          this.connectionForm.get('request').setValidators(Validators.required);
+          this.connectionForm.patchValue({port: ''});
+          // connection.port = '';
+          this.connectionForm.get('request').updateValueAndValidity();
+        }
+        console.log(this.connectionForm.value;
+      });
   }
 
   // Convert row into form, happens at table-cell level
   handleRowClick(connection) {
     // Save button was clicked, disables row input
-    if (this.savingConnection == true) {
-      // Set save button back to false
-      this.savingConnection = false;
-      // Disable row input
-      this.selectedRowIndex = -1;
-    } else {
-      if (connection.status == "Running") {
-        const dialogRef = this.dialog.open(RunningStatusDialogComponent, {
-          height: '200px',
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          if (result != '') { // They paused or stopped the connection
-            connection.status = result;
-            this.selectedRowIndex = connection.id;
-            console.log(`Dialog result: ${result}`);
-            console.log(this.selectedRowIndex);
-          }
-        });
-      } else { // Turns on editing/form
-        this.selectedRowIndex = connection.id;
+    // if (this.savingConnection == true) {
+    //   // Set save button back to false
+    //   this.savingConnection = false;
+    //   // Disable row input
+    //   this.selectedRowIndex = -1;
+    // } else {
+      // Prevent action on an already open row
+      if (connection.id != this.selectedRowIndex) {
+        if (connection.status == "Running") {
+          const dialogRef = this.dialog.open(RunningStatusDialogComponent, {
+            height: '200px',
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            if (result != '') { // They paused or stopped the connection
+              connection.status = result;
+              this.selectedRowIndex = connection.id;
+              console.log(`Dialog result: ${result}`);
+              console.log(this.selectedRowIndex);
+              this.rebuildForm(connection);
+            }
+          });
+        } else { // Turns on editing/form
+          this.selectedRowIndex = connection.id;
+          this.rebuildForm(connection);
+        }
       }
       console.log("row clicked");
-      // console.log(connection);
-    }
+      console.log(connection);
+    // }
   }
 
-  saveConnectionClick() {
+  saveConnectionClick(connection) {
     this.savingConnection = true;
-    console.log("save connection");
-    console.log(this.connectionForm.status);
-    console.log(this.connectionFormValid);
+    // console.log("save connection");
+    // console.log(connection);
     // Potential database edit through the service
-    // this.connectionService.upDateConnection();
+    this.connectionForm.value.id = this.selectedRowIndex;
+    // console.log(this.connectionForm.value)
+    this.connectionService.updateConnection(this.connectionForm.value);
+    this.selectedRowIndex = -1;
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -136,6 +171,12 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   onSubmit() {
     // Data is being autosaved by row, but they could have the choice to save/submit all the connections
   };
+
+  isConnectionFormValid($event) {
+    // console.log("isConnectionFormValid");
+    // console.log($event);
+    this.connectionFormValid = $event;
+  }
 
 }
 
@@ -186,9 +227,4 @@ export class RunningStatusDialogComponent {
   onStopClick(): void {
     this.dialogRef.close("Stopped");
   }
-}
-
-// Receives form validation from table cell
-export class TableCellComponent implements OnInit {
-  private connectionFormValid: boolean;
 }
