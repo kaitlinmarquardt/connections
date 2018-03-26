@@ -14,22 +14,15 @@
 <!-- Not disabled field -->
 <div *ngIf="!((connectionForm.value.method == 'TCP' && column == 'request') || (connectionForm.value.method == 'HTTPS' && column == 'port'))">
 
-  <!-- This is just the opposite of above -->
+  <!-- Form fields -->
   <mat-form-field *ngIf="selected" [formGroup]="connectionForm">
     <!-- Input text field -->
     <input matInput *ngIf="options.options.length == 0 && column != 'save'"
-      type="text" class="form-control" [formControlName]="column"
-      (ngModelChange)="onTableCellInputChange(connection)">
-      <!-- [id]="column" [(ngModel)]="connection[column]" [name]="column"  required-->
-  <!-- #[column]="ngModel" -->
-  <!-- [formControlName]="column" -->
+      type="text" class="form-control" [formControlName]="column">
+
     <!-- Selection dropdown -->
     <mat-select *ngIf="options.options.length > 0"
-      class="form-control" [formControlName]="column"
-      (ngModelChange)="onTableCellSelectionChange(connection)">
-      <!-- [id]="column"  [formControlName]="column"
-        required
-        [(ngModel)]="connection[column]" [name]="column"  -->
+      class="form-control" [formControlName]="column">
       <mat-option *ngFor="let option of options.options" [value]="option">{{option}}</mat-option>
       <!-- Adding a color to each dropdown -->
       <!-- <mat-option *ngIf="options.colors.length > 0" *ngFor="let option of options.options, let i = index" [value]="option">{{option}}</mat-option> -->
@@ -38,4 +31,3 @@
     <mat-error *ngIf="connectionForm.status">This field is required</mat-error>
   </mat-form-field>
 </div>
-<!-- <p>Form value: {{ connectionForm.status | json }}</p> -->

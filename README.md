@@ -6,7 +6,7 @@ Angular material design table for viewing, creating and editing connections.
 
 ## To Do:
 
-[ ] Get form validation to pass from table cell to table component for save button validation
+[X] Get form validation to pass from table cell to table component for save button validation
 
 [ ] Two-way data binding using a service breaks the paginator/sorting. I can grab a link, but it looks like this is an open issue(s) for angular material tables.
 

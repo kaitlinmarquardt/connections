@@ -54,17 +54,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       port: '',
       address: ['', Validators.required ]
     });
-    // console.log(this.connectionForm);
-
   }
 
-  ngOnChanges() {
-    // console.log("on changes");
-    // rebuildForm();
-    // console.log(this.dataSource);
-    // this.connectionForm.reset({this.connection});
-    // this.rebuildForm();
-  }
+  ngOnChanges() { }
 
   rebuildForm(connection) {
     this.connectionForm.reset({
@@ -101,52 +93,31 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   // Convert row into form, happens at table-cell level
   handleRowClick(connection) {
-    // Save button was clicked, disables row input
-    // if (this.savingConnection == true) {
-    //   // Set save button back to false
-    //   this.savingConnection = false;
-    //   // Disable row input
-    //   this.selectedRowIndex = -1;
-    // } else {
-      // Prevent action on an already open row
-      if (connection.id != this.selectedRowIndex) {
-        if (connection.status == "Running") {
-          const dialogRef = this.dialog.open(RunningStatusDialogComponent, {
-            height: '200px',
-          });
-          dialogRef.afterClosed().subscribe(result => {
-            if (result != '') { // They paused or stopped the connection
-              connection.status = result;
-              this.selectedRowIndex = connection.id;
-              console.log(`Dialog result: ${result}`);
-              console.log(this.selectedRowIndex);
-              this.rebuildForm(connection);
-            }
-          });
-        } else { // Turns on editing/form
-          this.selectedRowIndex = connection.id;
-          this.rebuildForm(connection);
-        }
+    if (connection.id != this.selectedRowIndex) {
+      if (connection.status == "Running") {
+        const dialogRef = this.dialog.open(RunningStatusDialogComponent, {
+          height: '200px',
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != '') { // They paused or stopped the connection
+            connection.status = result;
+            this.selectedRowIndex = connection.id;
+            // console.log(`Dialog result: ${result}`);
+            // console.log(this.selectedRowIndex);
+            this.rebuildForm(connection);
+          }
+        });
+      } else { // Turns on editing/form
+        this.selectedRowIndex = connection.id;
+        this.rebuildForm(connection);
       }
-      console.log("row clicked");
-      console.log(connection);
-    // }
-  }
-
-  saveConnectionClick(connection) {
-    this.savingConnection = true;
-    // console.log("save connection");
-    // console.log(connection);
-    // Potential database edit through the service
-    this.connectionForm.value.id = this.selectedRowIndex;
-    // console.log(this.connectionForm.value)
-    this.connectionService.updateConnection(this.connectionForm.value);
-    this.selectedRowIndex = -1;
+    }
+    console.log("row clicked");
+    console.log(connection);
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  // @ViewChild() sort: MatSort;
 
   /**
    * Set the paginator and sort after the view init since this component will
@@ -169,14 +140,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   // }
 
   onSubmit() {
-    // Data is being autosaved by row, but they could have the choice to save/submit all the connections
+    this.savingConnection = true;
+    this.connectionForm.value.id = this.selectedRowIndex;
+    this.connectionService.updateConnection(this.connectionForm.value);
+    this.selectedRowIndex = -1;
   };
-
-  isConnectionFormValid($event) {
-    // console.log("isConnectionFormValid");
-    // console.log($event);
-    this.connectionFormValid = $event;
-  }
 
 }
 
