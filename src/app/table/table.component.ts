@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { SelectionModel } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { merge } from 'rxjs/observable/merge';
@@ -11,6 +11,7 @@ import { catchError } from 'rxjs/operators/catchError';
 import { map } from 'rxjs/operators/map';
 import { startWith } from 'rxjs/operators/startWith';
 import { switchMap } from 'rxjs/operators/switchMap';
+import 'rxjs/add/observable/fromEvent';
 
 import { Connection, CONNECTIONS, OPTIONS } from '../connection';
 import { ConnectionService } from '../connection.service';
@@ -38,9 +39,13 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   connectionForm: FormGroup;
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('filter') filter: ElementRef;
+
   constructor(
     public dialog: MatDialog,
-    private connectionService: ConnectionService
+    private connectionService: ConnectionService,
     private fb: FormBuilder) {
       this.createForm();
   }
@@ -56,8 +61,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     });
   }
 
-  ngOnChanges() { }
-
   rebuildForm(connection) {
     this.connectionForm.reset({
       name: connection.name,
@@ -70,6 +73,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit() {
+    this.dataSource = new ConnectionDataSource(this.connectionService, this.paginator, this.sort);
+    // Observable.fromEvent(this.filter.nativeElement, 'keyup')
+    //   .debounceTime(150)
+    //   .distinctUntilChanged()
+    //   .subscribe(() => {
+    //     if (!this.dataSource) { return; }
+    //     this.dataSource.filter = this.filter.nativeElement.value;
+    // });
+
+
     // Make port or request required based on method selected
     this.connectionForm.get('method').valueChanges.subscribe(
       (method: string) => {
@@ -87,7 +100,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
           // connection.port = '';
           this.connectionForm.get('request').updateValueAndValidity();
         }
-        console.log(this.connectionForm.value;
+        console.log(this.connectionForm.value);
       });
   }
 
@@ -116,21 +129,48 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     console.log(connection);
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
   /**
    * Set the paginator and sort after the view init since this component will
    * be able to query its view for the initialized paginator and sort.
    */
   ngAfterViewInit() {
-    // console.log("after view");
+    console.log("after view");
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    console.log(this.dataSource.sort);
+    // server-side search
+         // fromEvent(this.input.nativeElement,'keyup')
+         //     .pipe(
+         //         debounceTime(150),
+         //         distinctUntilChanged(),
+         //         tap(() => {
+         //             this.paginator.pageIndex = 0;
+         //             this.loadLessonsPage();
+         //         })
+         //     )
+         //     .subscribe();
 
-    // reset the paginator after sorting
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+     // // reset the paginator after sorting
+     // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+     //
+     // // on sort or paginate events, load a new page
+     // merge(this.sort.sortChange, this.paginator.page)
+     //  .pipe(
+     //     tap(() => this.loadConnectionsPage())
+     // )
+     // .subscribe();
+
   }
+
+  // loadConnectionsPage() {
+  //   this.dataSource.loadConnections(
+  //       this.connection.id,
+  //       this.input.nativeElement.value,
+  //       this.sort.direction,
+  //       this.paginator.pageIndex,
+  //       this.paginator.pageSize);
+  // }
 
   // Optional, filter is hidden right now
   // applyFilter(filterValue: string) {
@@ -155,18 +195,81 @@ export class ConnectionDataSource extends MatTableDataSource<any> {
   }
 
   connect(): Observable<Connection[]> {
-    // Need to update for sort/paginator to work
-    // const changes = [
-    //   this.recordChange$
-    // ];
-    //
-    // return Observable.merge(this.sort.sortChange).map(() => {
-    // return Observable.merge(...changes)
-    //   .switchMap(() => return Observable.of(this.connectionService));
     return this.connectionService.connectionChange;
   }
 
   disconnect() {}
+
+
+  // get data(): Connection[] { return this.connectionService.connectionChange.value; }
+  //
+  // _filterChange = new BehaviorSubject('');
+  // get filter(): string { return this._filterChange.value; }
+  // set filter(filter: string) { this._filterChange.next(filter); }
+  //
+  // filteredData: Connection[] = [];
+  // renderedData: Connection[] = [];
+  //
+  // constructor(private connectionService: ConnectionService,
+  //           private _paginator: MatPaginator,
+  //           private _sort: MatSort) {
+  // super();
+  //
+  //   // Reset to the first page when the user changes the filter.
+  //   this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
+  // }
+
+/** Connect function called by the table to retrieve one stream containing the data to render. */
+// connect(): Observable<Connection[]> {
+//   // Listen for any changes in the base data, sorting, filtering, or pagination
+//   const displayDataChanges = [
+//     this.connectionService.connectionChange,
+//     this._sort.sortChange,
+//     this._filterChange,
+//     this._paginator.page,
+//   ];
+//
+//   return Observable.merge(...displayDataChanges).map(() => {
+//     // Filter data
+//     this.filteredData = this.data.slice().filter((item: Connection) => {
+//       let searchStr = (item.name + item.color).toLowerCase();
+//       return searchStr.indexOf(this.filter.toLowerCase()) != -1;
+//     });
+//
+//     console.log(this.filteredData);
+//     // Sort filtered data
+//     const sortedData = this.sortData(this.filteredData.slice());
+//
+//     // Grab the page's slice of the filtered sorted data.
+//     const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+//     this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
+//     return this.renderedData;
+//   });
+
+  /** Returns a sorted copy of the database data. */
+  // sortData(data: Connection[]) {
+  //   if (!this._sort.active || this._sort.direction == '') { return data; }
+  //
+  //   return data.sort((a, b) => {
+  //     let propertyA: number|string = '';
+  //     let propertyB: number|string = '';
+  //
+  //     switch (this._sort.active) {
+  //       case 'name': [propertyA, propertyB] = [a.name, b.name]; break;
+  //       case 'status': [propertyA, propertyB] = [a.status, b.status]; break;
+  //       case 'method': [propertyA, propertyB] = [a.method, b.method]; break;
+  //       case 'request': [propertyA, propertyB] = [a.request, b.request]; break;
+  //       case 'port': [propertyA, propertyB] = [a.port, b.port]; break;
+  //       case 'address': [propertyA, propertyB] = [a.address, b.address]; break;
+  //     }
+  //
+  //     let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+  //     let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+  //
+  //     return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+  //   });
+  // }
+
 }
 
 @Component({

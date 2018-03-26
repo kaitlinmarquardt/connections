@@ -10,7 +10,7 @@ Angular material design table for viewing, creating and editing connections.
 
 [ ] Two-way data binding using a service breaks the paginator/sorting. I can grab a link, but it looks like this is an open issue(s) for angular material tables.
 
-[ ] Colors for the connection status
+[X] Colors for the connection status
 
 [ ] Intro with instructions and an option to fill with the sample data
 
