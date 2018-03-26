@@ -16,19 +16,19 @@ export class Connection {
 export class ColumnOption {
   name: string; // the variable name this links to
   header: string;
-  options: list;
+  selections: list;
   colors: list;
 }
 
 // Defines headers and dropdown options for the table
 export const OPTIONS: ColumnOption[] = [
-  {name: 'name', header: 'Name', options: [], colors: []},
-  {name: 'status', header: 'Status' , options: ['Running', 'Paused', 'Stopped'], colors: ['green', 'yellow', 'red']},
-  {name: 'method', header: 'Communication Method' , options: ['HTTPS', 'TCP'], colors: []},
-  {name: 'request', header: 'Request' , options: ['PUT', 'POST'], colors: []},
-  {name: 'port', header: 'Port' , options: [], colors: []},
-  {name: 'address', header: 'IP or URL Address', options: [], colors: []},
-  {name: 'save', header: '', options: [], colors: []}
+  {name: 'name', header: 'Name', selections: [], colors: []},
+  {name: 'status', header: 'Status' , selections: ['Running', 'Paused', 'Stopped'], colors: ['green', 'yellow', 'red']},
+  {name: 'method', header: 'Communication Method' , selections: ['HTTPS', 'TCP'], colors: []},
+  {name: 'request', header: 'Request' , selections: ['PUT', 'POST'], colors: []},
+  {name: 'port', header: 'Port' , selections: [], colors: []},
+  {name: 'address', header: 'IP or URL Address', selections: [], colors: []},
+  {name: 'save', header: '', selections: [], colors: []}
 ]
 
 export const CONNECTIONS: Connection[] = [

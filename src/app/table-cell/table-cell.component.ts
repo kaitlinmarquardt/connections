@@ -20,4 +20,9 @@ export class TableCellComponent implements OnInit, OnChanges {
   ngOnInit() { }
 
   ngOnChanges() { }
+
+  getColor(value, options) {
+    let color = options.colors[ options.selections.indexOf(value)];
+    return color;
+  }
 }
